@@ -11,40 +11,6 @@ var submitBtn = document.getElementById("submit");
 var startBtn = document.getElementById("start");
 var initialsEl = document.getElementById("initials");
 var feedbackEl = document.getElementById("feedback");
-var questions = [
-  {
-    title: "Commonly used data types DO NOT include:",
-    choices: ["strings", "booleans", "alerts", "numbers"],
-    answer: "alerts"
-  },
-  {
-    title: "The condition in an if / else statement is enclosed within ____.",
-    choices: ["quotes", "curly brackets", "parentheses", "square brackets"],
-    answer: "parentheses"
-  },
-  {
-    title: "Arrays in JavaScript can be used to store ____.",
-    choices: [
-      "numbers and strings",
-      "other arrays",
-      "booleans",
-      "all of the above"
-    ],
-    answer: "all of the above"
-  },
-  {
-    title:
-      "String values must be enclosed within ____ when being assigned to variables.",
-    choices: ["commas", "curly brackets", "quotes", "parentheses"],
-    answer: "quotes"
-  },
-  {
-    title:
-      "A very useful tool used during development and debugging for printing content to the debugger is:",
-    choices: ["JavaScript", "terminal / bash", "for loops", "console.log"],
-    answer: "console.log"
-  }
-];
 
 // sound effects
 var sfxRight = new Audio("assets/sfx/correct.wav");
@@ -117,19 +83,28 @@ buttonEl.addEventListener("click", function(event){
     if(event.target.textContent !== questions[currentQuestionIndex].answer){
       console.log(event.target.textContent)
       console.log(buttonEl.innerText)
-      function AnsWrongAudio() {
-        sfxWrong.play();
-      }
-      AnsWrongAudio()
-    }
-    
+   
   // penalize time
   
       // display new time on page
   
       // play "wrong" sound effect
       
-      
+      function AnsWrongAudio() {
+        sfxWrong.play();
+      }
+      AnsWrongAudio()
+
+      document.getElementById("feedback").style.display="block";
+      document.getElementById("feedback").innerText="Wrong!";
+ 
+
+      setTimeout(function () {
+        document.getElementById('feedback').style.display='none';
+    }, 500);
+    
+    }
+    
    
       
   
@@ -143,6 +118,16 @@ buttonEl.addEventListener("click", function(event){
 
         score ++
         console.log(score)
+        document.getElementById("feedback").style.display="block";
+        document.getElementById("feedback").innerText="Correct!";
+   
+
+        setTimeout(function () {
+          document.getElementById('feedback').style.display='none';
+      }, 500);
+      
+  
+
       }
   
     // flash right/wrong feedback on page for half a second
@@ -182,11 +167,6 @@ buttonEl.addEventListener("click", function(event){
    
 })
   }
-
-
-
-
-
 }
 
 
@@ -198,16 +178,37 @@ function clockTick() {
 }
 
 function saveHighscore() {
+  
+  
   // get value of input box
+submitBtn.addEventListener("click", function(event){
+event.preventDefault();
+ // make sure value wasn't empty
+ var userInitials = document.querySelector("#initials").value;
+ if (userInitials === ""){
+  initialsEl.value="Please enter initials!"
+ }
 
-  // make sure value wasn't empty
+ else{
+
     // get saved scores from localstorage, or if not any, set to empty array
-
+    localStorage.setItem("final-score", score);
     // format new score object for current user
-
+    var stringifiedUser = JSON.stringify(userInitials);
+    localStorage.setItem("initials",stringifiedUser);
     // save to localstorage
-
+    
+    
     // redirect to next page
+    function pageRedirect(){
+      window.location.href = "highscores.html"
+    }
+    pageRedirect ()
+
+ }
+ 
+  });
+
 }
 
 function checkForEnter(event) {
