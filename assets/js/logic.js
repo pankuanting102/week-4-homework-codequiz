@@ -1,7 +1,6 @@
 // variables to keep track of quiz state
 var currentQuestionIndex = 0;
 var time = questions.length * 15;
-var timerId;
 var score = 0
 // variables to reference DOM elements
 var questionsEl = document.getElementById("questions");
@@ -15,6 +14,30 @@ var feedbackEl = document.getElementById("feedback");
 // sound effects
 var sfxRight = new Audio("assets/sfx/correct.wav");
 var sfxWrong = new Audio("assets/sfx/incorrect.wav");
+var secondsLeft = time;
+function setTime() {
+  var timerInterval = setInterval(function() {
+    secondsLeft--;
+    timerEl.textContent = secondsLeft + "s";
+
+    if(secondsLeft === 0) {
+    
+      document.querySelector("#end-screen").style.display="block"
+      // show final score
+    document.querySelector("#final-score").innerText=score * 20
+      // hide questions section
+      clearInterval(timerInterval)
+      questionsEl.style.display="none"
+    }
+
+    if (currentQuestionIndex>4){
+      clearInterval(timerInterval)
+      
+    }
+
+  }, 1000);
+}
+
 
 function startQuiz() {
   // hide start screen
@@ -23,19 +46,7 @@ function startQuiz() {
 questionsEl.style.display="block";
   // start timer
 
-  var secondsLeft = time;
-  function setTime() {
-    var timerInterval = setInterval(function() {
-      secondsLeft--;
-      timerEl.textContent = secondsLeft + "s";
-  
-      if(secondsLeft === 0) {
-        clearInterval(timerInterval);
-        sendMessage();
-      }
-  
-    }, 1000);
-  }
+
   
   // show starting time
   setTime()
@@ -85,9 +96,10 @@ buttonEl.addEventListener("click", function(event){
       console.log(buttonEl.innerText)
    
   // penalize time
-  
+  var i = secondsLeft; p=Math.floor(i * 0.8)
+  secondsLeft=p
       // display new time on page
-  
+      
       // play "wrong" sound effect
       
       function AnsWrongAudio() {
@@ -155,7 +167,7 @@ buttonEl.addEventListener("click", function(event){
     
     function quizEnd() {
       // stop timer
-    
+      
       // show end screen
       document.querySelector("#end-screen").style.display="block"
       // show final score
@@ -175,6 +187,9 @@ function clockTick() {
   // update time
 
   // check if user ran out of time
+  if (secondsLeft === 0){
+    quizEnd ()
+  }
 }
 
 function saveHighscore() {
@@ -184,21 +199,30 @@ function saveHighscore() {
 submitBtn.addEventListener("click", function(event){
 event.preventDefault();
  // make sure value wasn't empty
- var userInitials = document.querySelector("#initials").value;
+ var userInitials = document.querySelector("#initials").value.trim();
  if (userInitials === ""){
   initialsEl.value="Please enter initials!"
+  return;
  }
 
  else{
+var highScores = JSON.parse(window.localStorage.getItem("highScores")) || [];
+var latestScore = {
+  score: score,
+  name: userInitials,
+}    
+highScores.push(latestScore);
+window.localStorage.setItem("highScore", JSON.stringify(highScores));
 
-    // get saved scores from localstorage, or if not any, set to empty array
+
+// get saved scores from localstorage, or if not any, set to empty array
     localStorage.setItem("final-score", score);
     // format new score object for current user
     var stringifiedUser = JSON.stringify(userInitials);
     localStorage.setItem("initials",stringifiedUser);
     // save to localstorage
     
-    
+    saveHighscore()
     // redirect to next page
     function pageRedirect(){
       window.location.href = "highscores.html"
