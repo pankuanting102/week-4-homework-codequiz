@@ -4,6 +4,6 @@ I've tried to meet the class requirement but sure there are some UX detials need
 
 <b>Git Repository:</b>
 <br>https://github.com/pankuanting102/week-4-homework-codequiz
-<b>Deployed Application</b> 
+<br><b>Deployed Application</b> 
 <br>https://pankuanting102.github.io/week-4-homework-codequiz/index.html
 
