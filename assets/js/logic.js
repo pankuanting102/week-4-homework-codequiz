@@ -107,18 +107,15 @@ buttonEl.addEventListener("click", function(event){
       }
       AnsWrongAudio()
 
-      document.getElementById("feedback").style.display="block";
-      document.getElementById("feedback").innerText="Wrong!";
+      feedbackEl.style.display="block";
+      feedbackEl.innerText="Wrong!";
  
 
       setTimeout(function () {
         document.getElementById('feedback').style.display='none';
     }, 500);
     
-    }
-    
-   
-      
+    } 
   
     // else 
       // play "right" sound effect
@@ -182,15 +179,6 @@ buttonEl.addEventListener("click", function(event){
 }
 
 
-
-function clockTick() {
-  // update time
-
-  // check if user ran out of time
-  if (secondsLeft === 0){
-    quizEnd ()
-  }
-}
 
 function saveHighscore() {
   
